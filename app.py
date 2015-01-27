@@ -19,10 +19,3 @@ def decode():
             return abort(400)
     else:
         return abort(404)
-
-
-@app.route('/encode')
-def encode():
-    url = request.args.get('url')
-    raw = requests.get(url)
-    return base64.encodestring(raw)
