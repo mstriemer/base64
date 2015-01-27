@@ -10,7 +10,10 @@ app = Flask(__name__)
 @app.route('/decode')
 def decode():
     url = request.args.get('url')
+    print 'url', url
     raw = requests.get(url)
+    print 'raw', raw
+    print 'raw.ok', raw.ok
     if raw.ok:
         try:
             return base64.decodestring(raw.text)
