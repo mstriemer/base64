@@ -1,7 +1,7 @@
 import base64
 
 import requests
-from flask import Flask, request
+from flask import Flask, abort, request
 
 app = Flask(__name__)
 
@@ -9,17 +9,16 @@ app = Flask(__name__)
 @app.route('/decode')
 def decode():
     url = request.args.get('url')
-    print 'url', url
     raw = requests.get(url)
-    print 'raw', raw
-    print 'raw.ok', raw.ok
     if raw.ok:
         try:
-            return base64.decodestring(raw.text)
+            return (base64.decodestring(raw.text),
+                    200,
+                    {'Content-type': 'image/png'})
         except base64.binascii.Error:
-            return 400
+            return abort(400)
     else:
-        return 404
+        return abort(404)
 
 
 @app.route('/encode')
